@@ -4,5 +4,6 @@ const dotenv = require("dotenv")
 dotenv.config()
 
 module.exports = {
-    APP_PORT
+    APP_PORT,
+    BASE_URL
 } = process.env

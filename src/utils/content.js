@@ -5,7 +5,7 @@ const fs = require('fs')
 const dir = require('./dir')
 
 // 封装读取文件内容方法
-const file = require('./file')
+const{ file } = require('./file')
 
 
 /**
