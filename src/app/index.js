@@ -4,8 +4,13 @@ const Koa = require("koa")
 const {koaBody} = require('koa-body')
 const staticResource = require('koa-static') // 静态资源中间件
 const cors = require('koa2-cors'); //跨域处理
+const jwt = require('koa-jwt'); // JWT权限校验
 const path = require('path')
 const {getUName} = require("../utils/nanoId");
+const authError = require("../middleware/authentication");
+
+
+
 const app = new Koa()
 /**
  * static(root, option)
@@ -21,6 +26,8 @@ const app = new Koa()
  * }
  */
 app.use(staticResource(path.join(__dirname, '../../public'))) // 静态资源目录
+app.use(staticResource(path.join(__dirname, '../../static'))) // 静态资源目录
+
 app.use(cors({
     // 任何地址都可以访问
     origin:"*",
@@ -58,6 +65,7 @@ app.use(koaBody({
         }
     }
 }))
+app.use(authError)
 
 const useRoutes = require('../router')
 
