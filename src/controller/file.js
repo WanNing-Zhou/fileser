@@ -5,7 +5,7 @@ class fileController { // 创建类
     // console.log('create')
     // console.log('request', ctx.request.files)
     const file = ctx.request.files.file
-    console.log(file)
+    // console.log(file)
     // let headImg = config.BASE_URL+ '/' + file.filepath.split('/public/').pop();
     const headImg = `${config.BASE_URL}:${config.APP_PORT}/${file.filepath.split('/public/').pop()}`
     ctx.body = {
