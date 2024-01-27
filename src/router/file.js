@@ -9,7 +9,7 @@ const fileRouter = new Router({ prefix: "/file" }) // 设置接口前缀
 
 // const {upload} = require("../utils/file"); // 引入中间件
 
-fileRouter.use(jwt({secret: config.AUTH_SECRET})) // 使用中间件
+// fileRouter.use(jwt({secret: config.AUTH_SECRET})) // 使用中间件
 fileRouter.post('/', create)
 
 module.exports = fileRouter // 导出

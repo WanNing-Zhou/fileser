@@ -62,6 +62,13 @@ app.use(koaBody({
             // console.log('form', form)
             // part这里包含请求的信息
             return Date.now() + '-' + getUName() + ext
+        },
+        onError: (error) => {
+            app.status = 400;
+            log4js.error(error);
+            // 这里可以定义自己的返回内容
+            app.body = { code: 400, msg: "上传失败", data: {} };
+            return;
         }
     }
 }))
