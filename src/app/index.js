@@ -8,6 +8,7 @@ const jwt = require('koa-jwt'); // JWT权限校验
 const path = require('path')
 const {getUName} = require("../utils/nanoId");
 const authError = require("../middleware/authentication");
+const iCors = require('../middleware/iCors')
 
 
 
@@ -25,24 +26,32 @@ const app = new Koa()
  *     extensions: 当资源匹配不到的时候。根据传入的数组参数依次进行匹配，返回匹配到的第一个资源。
  * }
  */
+
+// 设置跨域访问
+app.use(iCors);
+
+// 设置静态资源
 app.use(staticResource(path.join(__dirname, '../../public'))) // 静态资源目录
+// app.use()
 app.use(staticResource(path.join(__dirname, '../../static'))) // 静态资源目录
+app.use(cors)
 
-app.use(cors({
-    // 任何地址都可以访问
-    origin:"*",
-    // 指定地址才可以访问
-    // origin: 'http://localhost:8080',
-    maxAge: 2592000,
-    // credentials: true, //是否允许发送Cookie
-    // 请求允许方法
-    // allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], //设置所允许的HTTP请求方法
-    // 允许的请求头信息
-    // allowHeaders: ['Content-Type', 'Authorization', 'Accept'], //设置服务器支持的所有头信息字段
-    // exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'] //设置获取其他自定义字段
 
- // 链接：https://juejin.cn/post/7136151612724084773
-}))
+// app.use(cors({
+//     // 任何地址都可以访问
+//     origin:"*",
+//     // 指定地址才可以访问
+//     // origin: 'http://localhost:8080',
+//     maxAge: 2592000,
+//     // credentials: true, //是否允许发送Cookie
+//     // 请求允许方法
+//     // allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], //设置所允许的HTTP请求方法
+//     // 允许的请求头信息
+//     // allowHeaders: ['Content-Type', 'Authorization', 'Accept'], //设置服务器支持的所有头信息字段
+//     // exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'] //设置获取其他自定义字段
+//
+//  // 链接：https://juejin.cn/post/7136151612724084773
+// }))
 
 // 文件上传
 app.use(koaBody({
