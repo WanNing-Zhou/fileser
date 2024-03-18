@@ -137,5 +137,20 @@
     <div onclick="clickPonit()">.</div>
     <div onclick="doCalc()">=</div>
 </div>
+<script>
+    function clickOperator(operator) {
+        var result = document.getElementById("result");
+        var string = result.innerHTML;
+        var len = string.length;
+        var last = string.charAt(len - 1);
+
+        if (last == "+" || last == "-" || last == "*" || last == "/" || last == "%") {
+            var temp = string.substr(0, len - 1) + operator;
+            result.innerHTML = temp;
+        } else {
+            result.innerHTML += operator;
+        }
+    }
+</script>
 </body>
 </html>
