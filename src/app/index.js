@@ -34,24 +34,24 @@ app.use(iCors);
 app.use(staticResource(path.join(__dirname, '../../public'))) // 静态资源目录
 // app.use()
 app.use(staticResource(path.join(__dirname, '../../static'))) // 静态资源目录
-app.use(cors)
+// app.use(cors)
 
 
-// app.use(cors({
-//     // 任何地址都可以访问
-//     origin:"*",
-//     // 指定地址才可以访问
-//     // origin: 'http://localhost:8080',
-//     maxAge: 2592000,
-//     // credentials: true, //是否允许发送Cookie
-//     // 请求允许方法
-//     // allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], //设置所允许的HTTP请求方法
-//     // 允许的请求头信息
-//     // allowHeaders: ['Content-Type', 'Authorization', 'Accept'], //设置服务器支持的所有头信息字段
-//     // exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'] //设置获取其他自定义字段
-//
-//  // 链接：https://juejin.cn/post/7136151612724084773
-// }))
+app.use(cors({
+    // 任何地址都可以访问
+    origin:"*",
+    // 指定地址才可以访问
+    // origin: 'http://localhost:8080',
+    maxAge: 2592000,
+    // credentials: true, //是否允许发送Cookie
+    // 请求允许方法
+    // allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], //设置所允许的HTTP请求方法
+    // 允许的请求头信息
+    // allowHeaders: ['Content-Type', 'Authorization', 'Accept'], //设置服务器支持的所有头信息字段
+    // exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'] //设置获取其他自定义字段
+
+ // 链接：https://juejin.cn/post/7136151612724084773
+}))
 
 // 文件上传
 app.use(koaBody({
@@ -70,6 +70,7 @@ app.use(koaBody({
             // console.log('part', part)
             // console.log('form', form)
             // part这里包含请求的信息
+            console.log('正在编写文件')
             return Date.now() + '-' + getUName() + ext
         },
         onError: (error) => {
