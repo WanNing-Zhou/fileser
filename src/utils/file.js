@@ -1,6 +1,7 @@
 const multer = require('@koa/multer');
 const fs = require('fs')
 const {getUName} = require("./nanoId");
+const path = require("path");
 
 /**
  * 读取文件方法
@@ -24,5 +25,20 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
+/**
+ * 去除文件扩展名
+ * @param filePath
+ * @returns {*}
+ */
 
-module.exports = { file, upload }
+function removeExtension(filePath) {
+    const fileName = path.basename(filePath);
+    const extensionIndex = fileName.lastIndexOf('.');
+    const cleanedFileName = fileName.slice(0, extensionIndex);
+    if(!cleanedFileName){
+        throw new Error('文件名不合法')
+    }
+    return cleanedFileName;
+}
+
+module.exports = { file, upload, removeExtension }

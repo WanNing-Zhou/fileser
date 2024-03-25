@@ -54,7 +54,7 @@ app.use(cors({
 }))
 
 // 文件上传
-app.use(koaBody({
+/*app.use(koaBody({
     // 支持文件格式
     multipart: true,
     formidable: {
@@ -81,7 +81,7 @@ app.use(koaBody({
             return;
         }
     }
-}))
+}))*/
 app.use(authError)
 
 const useRoutes = require('../router')

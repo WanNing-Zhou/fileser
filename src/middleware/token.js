@@ -1,5 +1,6 @@
 const {decryptDes} = require("../utils/desAg");
 const config = require('../app/config')
+const jwt = require("jsonwebtoken");
 
 // 解签
 const solveToken = (ctx, next) => {
@@ -23,7 +24,40 @@ const solveDES = (ctx, next) => {
     }
 }
 
+// 验证开发者权限
+const solveDevToken =  (ctx, next) => {
+    const token = ctx.headers["authorization"];
+
+    if (!token) {
+        ctx.body = {
+            code: 40100,
+            msg: '权限验证失败'
+        }
+    }
+
+    jwt.verify(token, process.env.SECRET_KEY, (err, data) => {
+        if (err) {
+            ctx.body = {
+                code: 40100,
+                message: "权限验证失败"
+            }
+        }
+        /**
+         * auth: 0 管理者, 1 开发者, 2 普通用户
+         */
+        if(data.auth <= 2){
+            ctx.body = {
+                code: 40300,
+                message: "权限不足"
+            }
+        }
+        // req.user = data;
+        next();
+    });
+}
+
 module.exports = {
     solveToken,
-    solveDES
+    solveDES,
+    solveDevToken
 }
