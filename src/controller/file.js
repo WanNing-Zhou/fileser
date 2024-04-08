@@ -18,7 +18,7 @@ class fileController { // 创建类
     // 返回地址
     const headImg = `${config.BASE_URL}:${config.APP_PORT}/${path.basename(file.filepath)}`
     ctx.body = {
-      code:200,
+      code:20000,
       data:{url: headImg},
       msg:'上传成功'
     }

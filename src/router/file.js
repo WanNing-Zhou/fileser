@@ -31,10 +31,10 @@ fileRouter.use(koaBody({
             return Date.now() + '-' + getUName() + ext
         },
         onError: (error) => {
-            app.status = 400;
+            app.status = 40000;
             log4js.error(error);
             // 这里可以定义自己的返回内容
-            app.body = { code: 400, msg: "上传失败", data: {} };
+            app.body = { code: 40000, msg: "上传失败", data: {} };
             return;
         }
     }

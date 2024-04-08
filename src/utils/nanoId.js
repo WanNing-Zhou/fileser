@@ -13,6 +13,5 @@ module.exports = {
             return nanoid(size)
         }
         return nanoid(10)
-
     }
 }
