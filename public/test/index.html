@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .content{
+            background-color: #4278bb;
+            width: 100%;
+            height: 100%;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<div class="content">
+    <div class="fetch_content">接受到的数据</div>
+    <div class="fetch_data"></div>
+</div>
+
+<body>
+
+<script>
+    /**
+     * 绑定监听函数，监听函数只有在数据变化时才会触发
+     * dataListener: 绑定函数
+     * autoTrigger: 在初次绑定监听函数时如果有缓存数据，是否需要主动触发一次，默认为false
+     * !!!重要说明: 因为子应用是异步渲染的，而主应用发送数据是同步的，
+     * 如果在子应用渲染结束前主应用发送数据，则在绑定监听函数前数据已经发送，在初始化后不会触发绑定函数，
+     * 但这个数据会放入缓存中，此时可以设置autoTrigger为true主动触发一次监听函数来获取数据。
+     */
+    const defaultConfig = [
+        {
+            type: 'num',
+            value: 20,
+            key: 'font-size',
+        },
+        {
+            type: 'color',
+            value: '#black',
+            key: "color"
+        },
+        {
+            type: 'text',
+            value: '你好，我是子应用',
+            key: "content"
+        }
+    ]
+
+    const postConfig = () => {
+        window.microApp.dispatch(defaultConfig)
+    }
+
+    const setConfig = (configValue) => {
+    }
+
+
+    const fetchEl = document.querySelector('.fetch_data')
+    window.microApp.addDataListener((message) => {
+        const { data, option } = message
+        switch (option){
+            case 'getConfig':
+                postConfig();
+                break;
+            case  'setConfig':
+                setConfig(data);
+        }
+        console.log('我他妈接到数据了', data)
+        fetchEl.textContent = data.name
+        console.log(window?.wqApp?.value)
+        window.microApp.dispatch({name: 'jack'})
+    })
+
+
+    // 解绑监听函数
+    // window.microApp.removeDataListener(dataListener: (data: Object) => any)
+
+    // 清空当前子应用的所有绑定函数(全局数据函数除外)
+    // window.microApp.clearDataListener()
+
+</script>
+</body>
+</html>
