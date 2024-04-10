@@ -7,6 +7,11 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <style>
+        /*子组件的body需要设置为100%*/
+        body{
+            height: 100%;
+            width: 100%;
+        }
         .content{
             background-color: #4278bb;
             width: 100%;
@@ -15,12 +20,12 @@
         }
     </style>
 </head>
+<body>
+
 <div class="content">
     <div class="fetch_content">接受到的数据</div>
     <div class="fetch_data"></div>
 </div>
-
-<body>
 
 <script>
     /**
@@ -33,44 +38,102 @@
      */
     const defaultConfig = [
         {
-            type: 'num',
+            type: 'number',
             value: 20,
             key: 'font-size',
+            label: '字体大小',
         },
         {
             type: 'color',
             value: '#black',
-            key: "color"
+            key: "color",
+            label: '背景颜色',
         },
         {
             type: 'text',
             value: '你好，我是子应用',
-            key: "content"
+            key: "content",
+            label: '内容',
         }
     ]
 
+
+    // 获取当前内容区
+    const contentEl = document.querySelector('.content')
+
+    const fetchEl = document.querySelector('.fetch_data')
+    const fetchData = document.querySelector('.fetch_data')
+    // 当前设置
+    let currentConfig = [
+        ...defaultConfig
+    ]
+
     const postConfig = () => {
-        window.microApp.dispatch(defaultConfig)
+        console.log('子组件: postconfig 触发')
+        window.microApp.dispatch({ option: 'PostEditConfig', data: [...currentConfig]})
     }
 
     const setConfig = (configValue) => {
+        console.log("我接到预览数据了", configValue)
+        currentConfig = [...configValue]
+        configValue.forEach( (item) => {
+            if( item.key==='color' ){
+                contentEl.style.background = item.value
+            }else if (item.key === 'font-size' ){
+                contentEl.style.fontSize = item.value + 'px'
+            }else if (item.key === 'content'){
+                fetchData.innerHTML = item.value
+            }
+        })
+    }
+
+    // 发送默认设置
+    const postDefaultConfig = () => {
+        window.microApp.dispatch({ option: 'PostEditConfig', data: [...defaultConfig]})
+    }
+
+    // 保存设置
+    const saveConfig = () => {
+        window.microApp.dispatch({ option: 'PostConfig', data: [...currentConfig]})
     }
 
 
-    const fetchEl = document.querySelector('.fetch_data')
-    window.microApp.addDataListener((message) => {
-        const { data, option } = message
+    /**
+     * 消息处理
+     * @param  option <string>
+     * @param data
+     */
+    function optionHandle(option, data){
         switch (option){
-            case 'getConfig':
+            case 'FetchEditConfig':  // 获取编辑的配置信息
                 postConfig();
                 break;
-            case  'setConfig':
+            case 'PostEditConfig' :  // 设置编辑的配置信息
                 setConfig(data);
+                break;
+            case 'GetEditDefConfig': // 父组件向自组件获取默认配置
+                postDefaultConfig()
+                break;
+            case 'ConfirmEditConfig': //  设置配置细心
+                saveConfig(data)
+                break;
+            case 'PostConfig':  // 父组件向子组件发送配置信息
+                setConfig(data)
+                break;
         }
-        console.log('我他妈接到数据了', data)
-        fetchEl.textContent = data.name
-        console.log(window?.wqApp?.value)
-        window.microApp.dispatch({name: 'jack'})
+    }
+
+    window.microApp.addDataListener((message) => {
+        const { data, option } = message
+
+        console.log('子组件: 我他妈接到数据了',option, data)
+
+
+        optionHandle(option,data)
+
+        // fetchEl.textContent = data.name
+        // console.log(window?.wqApp?.value)
+        // window.microApp.dispatch({name: 'jack'})
     })
 
 
